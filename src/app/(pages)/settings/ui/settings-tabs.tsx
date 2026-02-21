@@ -1,13 +1,11 @@
 import { ProfileCard } from './profile-card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@shared/ui/tabs'
 import { ProfileEditForm } from '@features/edit-profile'
-import { Role } from '@shared/prisma/generated/enums'
-import { requireAuth } from '@shared/api/auth.guard'
+import { requireIsAdmin } from '@shared/api/auth.guard'
 import { AdminRoleManager } from '@features/update-role'
 
 export async function SettingsTabs() {
-  const user = await requireAuth()
-  const isAdmin = user.role === Role.ADMIN
+  const isAdmin = await requireIsAdmin()
 
   return (
     <Tabs defaultValue="profile">

@@ -27,3 +27,15 @@ export async function requireAdmin(): Promise<Session['user']> {
 
   return user
 }
+
+/**
+ * Throws if the user is not authenticated or not an admin, otherwise returns true. Useful for conditional rendering in components.
+ */
+export async function requireIsAdmin(): Promise<boolean> {
+  try {
+    const user = await requireAuth()
+    return user.role === Role.ADMIN
+  } catch {
+    return false
+  }
+}

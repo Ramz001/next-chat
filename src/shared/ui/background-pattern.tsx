@@ -1,7 +1,7 @@
 const BackgroundPattern = () => {
   return (
     <span
-      className="absolute inset-0 -z-10"
+      className="fixed inset-0 -z-10"
       style={{
         background: `
           radial-gradient(ellipse 70% 55% at 50% 50%, rgba(255, 20, 147, 0.15), transparent 50%),
