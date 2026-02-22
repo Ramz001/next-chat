@@ -6,8 +6,10 @@ import type { PromptInputMessage } from '@shared/ui/ai-elements/prompt-input'
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
 
+import axios from 'axios'
 import {
   Attachment,
+  AttachmentInfo,
   AttachmentPreview,
   AttachmentRemove,
   Attachments,
@@ -75,7 +77,8 @@ const AttachmentItem = ({
   return (
     <Attachment data={attachment} onRemove={handleRemove}>
       <AttachmentPreview />
-      <AttachmentRemove />
+      <AttachmentInfo />
+      <AttachmentRemove variant={'destructive'} />
     </Attachment>
   )
 }
@@ -221,20 +224,15 @@ const ChatbotWidget = () => {
     const formData = new FormData()
     formData.append('audio', audioBlob, 'recording.webm')
 
-    const response = await fetch('/api/chat/transcribe', {
-      method: 'POST',
-      body: formData,
-    })
-
-    if (!response.ok) {
+    try {
+      const { data } = await axios.post('/api/transcribe', formData)
+      return data.text ?? ''
+    } catch {
       toast.error('Transcription failed', {
         description: 'Could not transcribe audio. Please try again.',
       })
       return ''
     }
-
-    const data = await response.json()
-    return data.text ?? ''
   }, [])
 
   const handleTextChange = useCallback(
