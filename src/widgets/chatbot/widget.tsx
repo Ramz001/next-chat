@@ -68,7 +68,6 @@ import {
 import { SpeechInput } from '@shared/ui/ai-elements/speech-input'
 import { Suggestion, Suggestions } from '@shared/ui/ai-elements/suggestion'
 import { CheckIcon, GlobeIcon } from 'lucide-react'
-import { nanoid } from 'nanoid'
 import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 
@@ -453,7 +452,7 @@ const ChatbotWidget = () => {
         <ConversationScrollButton />
       </Conversation>
       <div className="grid shrink-0 gap-4 pt-4">
-        <Suggestions className="px-4">
+        <Suggestions>
           {suggestions.map((suggestion) => (
             <SuggestionItem
               key={suggestion}
@@ -462,7 +461,7 @@ const ChatbotWidget = () => {
             />
           ))}
         </Suggestions>
-        <div className="w-full px-4 pb-4">
+        <div className="w-full pb-2">
           <PromptInput globalDrop multiple onSubmit={handleSubmit}>
             <PromptInputHeader>
               <PromptInputAttachmentsDisplay />

@@ -65,7 +65,7 @@ export function SignUpForm() {
         }
 
         toast.success('Account created! You can now sign in.')
-        router.push('/settings')
+        router.push('/')
       } catch (error) {
         handleError(error)
       }

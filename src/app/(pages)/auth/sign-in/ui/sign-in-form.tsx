@@ -53,7 +53,7 @@ export function SignInForm() {
         }
 
         toast.success('Signed in successfully.')
-        router.push('/settings')
+        router.push('/')
       } catch (error) {
         handleError(error)
       }
