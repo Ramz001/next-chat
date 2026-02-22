@@ -6,7 +6,6 @@ import { Button } from '@shared/ui/button'
 import Gutter from '@shared/ui/gutter'
 import { ThemeToggle } from './ui/theme-toggle'
 import { UserMenu } from './ui/user-menu'
-import { MobileMenu } from './ui/mobile-menu'
 import { useSession } from 'next-auth/react'
 
 type NavLink = {
@@ -36,16 +35,6 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop navigation */}
-        <nav
-          className="hidden items-center gap-0.5 md:flex"
-          aria-label="Main navigation"
-        >
-          {navLinks.map((link) => (
-            <Button key={link.href} variant="ghost" size="sm" asChild>
-              <Link href={link.href}>{link.label}</Link>
-            </Button>
-          ))}
-        </nav>
 
         {/* Right-side actions */}
         <div className="flex items-center gap-1">
@@ -65,7 +54,7 @@ export default function Navbar() {
           )}
 
           {/* Mobile menu — always rendered */}
-          <MobileMenu user={user} navLinks={navLinks} />
+          {/* <MobileMenu user={user} navLinks={navLinks} /> */}
         </div>
       </Gutter>
     </header>

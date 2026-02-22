@@ -10,7 +10,7 @@ test.describe('unauthenticated user', () => {
   test('can access the home page', async ({ page }) => {
     await page.goto('/')
     await expect(
-      page.getByRole('heading', { name: /Welcome to our Auth Demo/ })
+      page.getByRole('heading', { name: /Sign in to start chatting with our AI assistant/ })
     ).toBeVisible()
   })
 
