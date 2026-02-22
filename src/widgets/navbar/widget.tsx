@@ -31,7 +31,7 @@ export default function Navbar() {
           className="text-foreground flex shrink-0 items-center gap-2 font-semibold transition-opacity hover:opacity-80"
         >
           <MessageSquareText className="text-primary size-5" />
-          <span className="hidden sm:inline">NextChat</span>
+          <span className="inline">NextChat</span>
         </Link>
 
         {/* Desktop navigation */}

@@ -26,6 +26,7 @@ export const chatLLM = async (req: NextRequest) => {
     const result = streamText({
       model,
       messages: await convertToModelMessages(messages),
+      maxOutputTokens: 2048,
     })
 
     return result.toUIMessageStreamResponse()
