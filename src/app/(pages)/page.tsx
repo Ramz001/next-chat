@@ -9,7 +9,7 @@ export default async function HomePage() {
 
   if (session) {
     return (
-      <Gutter className="flex min-h-screen flex-col items-center justify-center gap-4">
+      <Gutter className="flex min-h-[90vh] flex-col items-center justify-center gap-4">
         <h1 className="text-foreground mb-2 text-4xl font-bold">
           Welcome back, {session.user?.name || 'User'}! 👋
         </h1>
@@ -27,7 +27,7 @@ export default async function HomePage() {
   }
 
   return (
-    <Gutter className="flex min-h-screen flex-col items-center justify-center gap-4">
+    <Gutter className="flex min-h-[90vh] flex-col items-center justify-center gap-4">
       <h1 className="text-foreground mb-2 text-4xl font-bold">Hey there! 👋</h1>
       <h2 className="text-muted-foreground mb-6 text-xl">
         Welcome to our Auth Demo

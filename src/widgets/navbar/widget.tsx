@@ -1,24 +1,24 @@
+'use client'
 import Link from 'next/link'
 import { MessageSquareText } from 'lucide-react'
-import { auth } from '@shared/api/auth'
 import { Role } from '@shared/prisma/generated/enums'
 import { Button } from '@shared/ui/button'
 import Gutter from '@shared/ui/gutter'
 import { ThemeToggle } from './ui/theme-toggle'
 import { UserMenu } from './ui/user-menu'
 import { MobileMenu } from './ui/mobile-menu'
+import { useSession } from 'next-auth/react'
 
 type NavLink = {
   href: string
   label: string
 }
 
-export default async function Navbar() {
-  const session = await auth()
-  const user = session?.user ?? null
+export default function Navbar() {
+  const { data: session } = useSession()
+  const user = session?.user
 
   const navLinks: NavLink[] = [
-    { href: '/', label: 'Home' },
     ...(user ? [{ href: '/settings', label: 'Settings' }] : []),
     ...(user?.role === Role.ADMIN ? [{ href: '/admin', label: 'Admin' }] : []),
   ]

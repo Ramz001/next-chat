@@ -9,6 +9,7 @@ import { Role } from '@shared/prisma/generated/enums'
 import { Button } from '@shared/ui/button'
 import { Separator } from '@shared/ui/separator'
 import { cn } from '@shared/utils/cn'
+import type { Session } from 'next-auth'
 
 type NavLink = {
   href: string
@@ -16,11 +17,7 @@ type NavLink = {
 }
 
 type MobileMenuProps = {
-  user: {
-    name?: string | null
-    email?: string | null
-    role: Role
-  } | null
+  user?: Session['user'] 
   navLinks: NavLink[]
 }
 

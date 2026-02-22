@@ -1,5 +1,5 @@
 import { mapError, type MapErrorResult } from './map-error'
-import { NextResponse } from 'next/server'
+import { NextResponse, type NextRequest } from 'next/server'
 
 export type ActionSuccess<T> = {
   success: true
@@ -39,11 +39,13 @@ export function withActionErrorHandler<Args extends unknown[], T>(
  * Wrap any async server handler to catch errors.
  * Ignores the handler's normal return value — only ensures errors are handled consistently.
  */
-export function withRouteErrorHandler<T>(handler: () => Promise<T>) {
-  return async () => {
+export const withRouteErrorHandler = (
+  handler: (req: NextRequest) => Promise<NextResponse>
+) => {
+  return async (req: NextRequest): Promise<NextResponse> => {
     try {
-      return await handler()
-    } catch (error: unknown) {
+      return await handler(req)
+    } catch (error) {
       const { error: mappedError, status } = mapError(error)
       console.error('[Route Error]:', error)
 
