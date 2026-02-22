@@ -76,7 +76,7 @@ export const QueueItemContent = ({
 }: QueueItemContentProps) => (
   <span
     className={cn(
-      "line-clamp-1 grow break-words",
+      "line-clamp-1 grow wrap-break-word",
       completed
         ? "text-muted-foreground/50 line-through"
         : "text-muted-foreground",
@@ -152,6 +152,7 @@ export const QueueItemImage = ({
   className,
   ...props
 }: QueueItemImageProps) => (
+  // eslint-disable-next-line @next/next/no-img-element
   <img
     alt=""
     className={cn("h-8 w-8 rounded border object-cover", className)}
@@ -176,7 +177,7 @@ export const QueueItemFile = ({
     {...props}
   >
     <PaperclipIcon size={12} />
-    <span className="max-w-[100px] truncate">{children}</span>
+    <span className="max-w-25 truncate">{children}</span>
   </span>
 );
 

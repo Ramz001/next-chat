@@ -47,6 +47,7 @@ export function UserMenu({ user }: UserMenuProps) {
           aria-label="User menu"
         >
           {user.image ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={user.image}
               alt={user.name ?? 'User avatar'}

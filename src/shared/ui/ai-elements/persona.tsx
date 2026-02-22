@@ -171,6 +171,12 @@ const PersonaWithoutModel = memo(
 
 PersonaWithoutModel.displayName = "PersonaWithoutModel";
 
+const setInputValue = (input: any, value: boolean) => {
+  if (input) {
+    input.value = value;
+  }
+};
+
 export const Persona: FC<PersonaProps> = memo(
   ({
     variant = "obsidian",
@@ -253,18 +259,10 @@ export const Persona: FC<PersonaProps> = memo(
     const asleepInput = useStateMachineInput(rive, stateMachine, "asleep");
 
     useEffect(() => {
-      if (listeningInput) {
-        listeningInput.value = state === "listening";
-      }
-      if (thinkingInput) {
-        thinkingInput.value = state === "thinking";
-      }
-      if (speakingInput) {
-        speakingInput.value = state === "speaking";
-      }
-      if (asleepInput) {
-        asleepInput.value = state === "asleep";
-      }
+      setInputValue(listeningInput, state === "listening");
+      setInputValue(thinkingInput, state === "thinking");
+      setInputValue(speakingInput, state === "speaking");
+      setInputValue(asleepInput, state === "asleep");
     }, [state, listeningInput, thinkingInput, speakingInput, asleepInput]);
 
     const Component = source.hasModel ? PersonaWithModel : PersonaWithoutModel;

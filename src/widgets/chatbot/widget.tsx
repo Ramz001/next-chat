@@ -285,7 +285,7 @@ const ChatbotWidget = () => {
               <PromptInputTools>
                 <PromptInputActionMenu>
                   <PromptInputActionMenuTrigger />
-                  <PromptInputActionMenuContent>
+                  <PromptInputActionMenuContent className="w-full">
                     <PromptInputActionAddAttachments />
                   </PromptInputActionMenuContent>
                 </PromptInputActionMenu>
