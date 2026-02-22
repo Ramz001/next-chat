@@ -3,7 +3,7 @@ import { VerifyEmailForm } from './ui/verify-email-form'
 
 export default async function VerifyEmailPage() {
   return (
-    <Gutter className="flex min-h-screen flex-col items-center justify-center gap-4">
+    <Gutter className="flex min-h-[90vh] flex-col items-center justify-center gap-4">
       <header className="max-w-md space-y-1 text-center">
         <h1 className="text-foreground text-3xl font-semibold">
           Verify Your Email

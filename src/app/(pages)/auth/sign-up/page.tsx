@@ -3,7 +3,7 @@ import { SignUpForm } from './ui/sign-up-form'
 
 export default function SignUpPage() {
   return (
-    <Gutter className="flex min-h-screen flex-col items-center justify-center gap-4">
+    <Gutter className="flex min-h-[90vh] flex-col items-center justify-center gap-4">
       <header className="space-y-1 text-center">
         <h1 className="text-foreground text-3xl font-semibold">
           Create your account
