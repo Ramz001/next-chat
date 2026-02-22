@@ -28,7 +28,7 @@ export const models = [
   },
 ]
 
-export const ALLOWED_MODELS = models.map((model) => model.id) 
+export const ALLOWED_MODELS = models.map((model) => model.id)
 
 export const suggestions = [
   'What are the latest trends in AI?',

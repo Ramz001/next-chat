@@ -53,9 +53,10 @@ import {
   PromptInputTools,
   usePromptInputAttachments,
 } from '@shared/ui/ai-elements/prompt-input'
+import { Shimmer } from '@shared/ui/ai-elements/shimmer'
 import { SpeechInput } from '@shared/ui/ai-elements/speech-input'
 import { Suggestion, Suggestions } from '@shared/ui/ai-elements/suggestion'
-import { CheckIcon, GlobeIcon } from 'lucide-react'
+import { CheckIcon, GlobeIcon, StopCircleIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { chefs, suggestions, models } from './model/ai-models'
@@ -216,6 +217,26 @@ const ChatbotWidget = () => {
     setText((prev: string) => (prev ? `${prev} ${transcript}` : transcript))
   }, [])
 
+  const handleAudioRecorded = useCallback(async (audioBlob: Blob) => {
+    const formData = new FormData()
+    formData.append('audio', audioBlob, 'recording.webm')
+
+    const response = await fetch('/api/chat/transcribe', {
+      method: 'POST',
+      body: formData,
+    })
+
+    if (!response.ok) {
+      toast.error('Transcription failed', {
+        description: 'Could not transcribe audio. Please try again.',
+      })
+      return ''
+    }
+
+    const data = await response.json()
+    return data.text ?? ''
+  }, [])
+
   const handleTextChange = useCallback(
     (event: React.ChangeEvent<HTMLTextAreaElement>) => {
       setText(event.target.value)
@@ -232,9 +253,14 @@ const ChatbotWidget = () => {
     setModelSelectorOpen(false)
   }, [])
 
+  const isLoading = useMemo(
+    () => status === 'streaming' || status === 'submitted',
+    [status]
+  )
+
   const isSubmitDisabled = useMemo(
-    () => !text.trim() || status === 'streaming' || status === 'submitted',
-    [text, status]
+    () => !text.trim() || isLoading,
+    [text, isLoading]
   )
 
   return (
@@ -242,24 +268,50 @@ const ChatbotWidget = () => {
       <Conversation>
         <ConversationContent>
           {messages.length === 0 && <ConversationEmptyState />}
-          {messages.map((message) => (
-            <MessageBranch defaultBranch={0} key={message.id}>
-              <MessageBranchContent>
-                <Message
-                  from={message.role === 'user' ? 'user' : 'assistant'}
-                  key={message.id}
-                >
-                  <div>
-                    <MessageContent>
-                      <MessageResponse>
-                        {getMessageText(message)}
-                      </MessageResponse>
-                    </MessageContent>
-                  </div>
-                </Message>
-              </MessageBranchContent>
-            </MessageBranch>
-          ))}
+          {messages.map((message, index) => {
+            const messageText = getMessageText(message)
+            const isLastMessage = index === messages.length - 1
+            const isAssistant = message.role === 'assistant'
+            const showShimmer =
+              isAssistant && isLastMessage && isLoading && !messageText
+
+            return (
+              <MessageBranch defaultBranch={0} key={message.id}>
+                <MessageBranchContent>
+                  <Message
+                    from={isAssistant ? 'assistant' : 'user'}
+                    key={message.id}
+                  >
+                    <div>
+                      <MessageContent>
+                        {showShimmer ? (
+                          <Shimmer duration={1.5}>Thinking...</Shimmer>
+                        ) : (
+                          <MessageResponse
+                            controls={{ code: true, table: true }}
+                          >
+                            {messageText}
+                          </MessageResponse>
+                        )}
+                      </MessageContent>
+                    </div>
+                  </Message>
+                </MessageBranchContent>
+              </MessageBranch>
+            )
+          })}
+          {isLoading && (
+            <div className="flex justify-center py-2">
+              <button
+                className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors"
+                onClick={stop}
+                type="button"
+              >
+                <StopCircleIcon size={16} />
+                <span>Cancel</span>
+              </button>
+            </div>
+          )}
         </ConversationContent>
         <ConversationScrollButton />
       </Conversation>
@@ -291,6 +343,7 @@ const ChatbotWidget = () => {
                 </PromptInputActionMenu>
                 <SpeechInput
                   className="shrink-0"
+                  onAudioRecorded={handleAudioRecorded}
                   onTranscriptionChange={handleTranscriptionChange}
                   size="icon-sm"
                   variant="ghost"
