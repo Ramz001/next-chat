@@ -10,6 +10,9 @@ const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-sans' })
 export const metadata: Metadata = {
   title: 'Next.js Chat App',
   description: 'A chat application built with Next.js and React.',
+  icons: {
+    icon: '/chat.svg',
+  },
 }
 
 export default function RootLayout({
