@@ -4,6 +4,7 @@ import type { FileUIPart } from 'ai'
 import type { PromptInputMessage } from '@shared/ui/ai-elements/prompt-input'
 
 import { useChat } from '@ai-sdk/react'
+import { DefaultChatTransport } from 'ai'
 
 import {
   Attachment,
@@ -57,57 +58,7 @@ import { Suggestion, Suggestions } from '@shared/ui/ai-elements/suggestion'
 import { CheckIcon, GlobeIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
-
-const models = [
-  {
-    chef: 'OpenAI',
-    chefSlug: 'openai',
-    id: 'gpt-4o',
-    name: 'GPT-4o',
-    providers: ['openai', 'azure'],
-  },
-  {
-    chef: 'OpenAI',
-    chefSlug: 'openai',
-    id: 'gpt-4o-mini',
-    name: 'GPT-4o Mini',
-    providers: ['openai', 'azure'],
-  },
-  {
-    chef: 'Anthropic',
-    chefSlug: 'anthropic',
-    id: 'claude-opus-4-20250514',
-    name: 'Claude 4 Opus',
-    providers: ['anthropic', 'azure', 'google', 'amazon-bedrock'],
-  },
-  {
-    chef: 'Anthropic',
-    chefSlug: 'anthropic',
-    id: 'claude-sonnet-4-20250514',
-    name: 'Claude 4 Sonnet',
-    providers: ['anthropic', 'azure', 'google', 'amazon-bedrock'],
-  },
-  {
-    chef: 'Google',
-    chefSlug: 'google',
-    id: 'gemini-2.0-flash-exp',
-    name: 'Gemini 2.0 Flash',
-    providers: ['google'],
-  },
-]
-
-const suggestions = [
-  'What are the latest trends in AI?',
-  'How does machine learning work?',
-  'Explain quantum computing',
-  'Best practices for React development',
-  'Tell me about TypeScript benefits',
-  'How to optimize database queries?',
-  'What is the difference between SQL and NoSQL?',
-  'Explain cloud computing basics',
-]
-
-const chefs = ['OpenAI', 'Anthropic', 'Google']
+import { chefs, suggestions, models } from './model/ai-models'
 
 const AttachmentItem = ({
   attachment,
@@ -206,7 +157,15 @@ const ChatbotWidget = () => {
   const [text, setText] = useState<string>('')
   const [useWebSearch, setUseWebSearch] = useState<boolean>(false)
 
-  const { messages, status, stop, sendMessage } = useChat()
+  const transport = useMemo(
+    () =>
+      new DefaultChatTransport({
+        body: { model },
+      }),
+    [model]
+  )
+
+  const { messages, status, stop, sendMessage } = useChat({ transport })
 
   const selectedModelData = useMemo(
     () => models.find((m) => m.id === model),
