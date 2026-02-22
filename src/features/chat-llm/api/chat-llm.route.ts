@@ -1,8 +1,7 @@
 import { streamText, UIMessage, convertToModelMessages } from 'ai'
-import { withRouteErrorHandler } from '@shared/api/server-error-handlers'
-import { NextResponse, NextRequest } from 'next/server'
+import { NextRequest } from 'next/server'
 
-const chatLLM = async (req: NextRequest): Promise<NextResponse> => {
+export const chatLLM = async (req: NextRequest) => {
   const { messages }: { messages: UIMessage[] } = await req.json()
 
   const result = streamText({
@@ -10,8 +9,5 @@ const chatLLM = async (req: NextRequest): Promise<NextResponse> => {
     messages: await convertToModelMessages(messages),
   })
 
-  const response = result.toUIMessageStreamResponse()
-  return new NextResponse(response.body, response)
+  return result.toUIMessageStreamResponse()
 }
-
-export const POST = withRouteErrorHandler(chatLLM)

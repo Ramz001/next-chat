@@ -1,7 +1,9 @@
 'use client'
 
-import type { FileUIPart, ToolUIPart } from 'ai'
+import type { FileUIPart } from 'ai'
 import type { PromptInputMessage } from '@shared/ui/ai-elements/prompt-input'
+
+import { useChat } from '@ai-sdk/react'
 
 import {
   Attachment,
@@ -19,10 +21,6 @@ import {
   Message,
   MessageBranch,
   MessageBranchContent,
-  MessageBranchNext,
-  MessageBranchPage,
-  MessageBranchPrevious,
-  MessageBranchSelector,
   MessageContent,
   MessageResponse,
 } from '@shared/ui/ai-elements/message'
@@ -54,46 +52,11 @@ import {
   PromptInputTools,
   usePromptInputAttachments,
 } from '@shared/ui/ai-elements/prompt-input'
-import {
-  Reasoning,
-  ReasoningContent,
-  ReasoningTrigger,
-} from '@shared/ui/ai-elements/reasoning'
-import {
-  Source,
-  Sources,
-  SourcesContent,
-  SourcesTrigger,
-} from '@shared/ui/ai-elements/sources'
 import { SpeechInput } from '@shared/ui/ai-elements/speech-input'
 import { Suggestion, Suggestions } from '@shared/ui/ai-elements/suggestion'
 import { CheckIcon, GlobeIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
-
-interface MessageType {
-  key: string
-  from: 'user' | 'assistant'
-  sources?: { href: string; title: string }[]
-  versions: {
-    id: string
-    content: string
-  }[]
-  reasoning?: {
-    content: string
-    duration: number
-  }
-  tools?: {
-    name: string
-    description: string
-    status: ToolUIPart['state']
-    parameters: Record<string, unknown>
-    result: string | undefined
-    error: string | undefined
-  }[]
-}
-
-const initialMessages: MessageType[] = []
 
 const models = [
   {
@@ -143,16 +106,6 @@ const suggestions = [
   'What is the difference between SQL and NoSQL?',
   'Explain cloud computing basics',
 ]
-
-const mockResponses = [
-  "That's a great question! Let me help you understand this concept better. The key thing to remember is that proper implementation requires careful consideration of the underlying principles and best practices in the field.",
-]
-
-const delay = (ms: number): Promise<void> =>
-  // eslint-disable-next-line promise/avoid-new -- setTimeout requires a new Promise
-  new Promise((resolve) => {
-    setTimeout(resolve, ms)
-  })
 
 const chefs = ['OpenAI', 'Anthropic', 'Google']
 
@@ -252,95 +205,24 @@ const ChatbotWidget = () => {
   const [modelSelectorOpen, setModelSelectorOpen] = useState(false)
   const [text, setText] = useState<string>('')
   const [useWebSearch, setUseWebSearch] = useState<boolean>(false)
-  const [status, setStatus] = useState<
-    'submitted' | 'streaming' | 'ready' | 'error'
-  >('ready')
-  const [messages, setMessages] = useState<MessageType[]>(initialMessages)
-  const [, setStreamingMessageId] = useState<string | null>(null)
+
+  const { messages, status, stop, sendMessage } = useChat()
 
   const selectedModelData = useMemo(
     () => models.find((m) => m.id === model),
     [model]
   )
 
-  const updateMessageContent = useCallback(
-    (messageId: string, newContent: string) => {
-      setMessages((prev) =>
-        prev.map((msg) => {
-          if (msg.versions.some((v) => v.id === messageId)) {
-            return {
-              ...msg,
-              versions: msg.versions.map((v) =>
-                v.id === messageId ? { ...v, content: newContent } : v
-              ),
-            }
-          }
-          return msg
-        })
-      )
-    },
+  const getMessageText = useCallback(
+    (msg: (typeof messages)[number]) =>
+      msg.parts
+        .filter((part) => part.type === 'text')
+        .map((part) => part.text)
+        .join(''),
     []
   )
 
-  const streamResponse = useCallback(
-    async (messageId: string, content: string) => {
-      setStatus('streaming')
-      setStreamingMessageId(messageId)
-
-      const words = content.split(' ')
-      let currentContent = ''
-
-      for (const [i, word] of words.entries()) {
-        currentContent += (i > 0 ? ' ' : '') + word
-        updateMessageContent(messageId, currentContent)
-        await delay(Math.random() * 100 + 50)
-      }
-
-      setStatus('ready')
-      setStreamingMessageId(null)
-    },
-    [updateMessageContent]
-  )
-
-  const addUserMessage = useCallback(
-    (content: string) => {
-      const userMessage: MessageType = {
-        from: 'user',
-        key: `user-${Date.now()}`,
-        versions: [
-          {
-            content,
-            id: `user-${Date.now()}`,
-          },
-        ],
-      }
-
-      setMessages((prev) => [...prev, userMessage])
-
-      setTimeout(() => {
-        const assistantMessageId = `assistant-${Date.now()}`
-        const randomResponse =
-          mockResponses[Math.floor(Math.random() * mockResponses.length)]
-
-        const assistantMessage: MessageType = {
-          from: 'assistant',
-          key: `assistant-${Date.now()}`,
-          versions: [
-            {
-              content: '',
-              id: assistantMessageId,
-            },
-          ],
-        }
-
-        setMessages((prev) => [...prev, assistantMessage])
-        streamResponse(assistantMessageId, randomResponse)
-      }, 500)
-    },
-    [streamResponse]
-  )
-
-  const handleSubmit = useCallback(
+  const handlePromptSubmit = useCallback(
     (message: PromptInputMessage) => {
       const hasText = Boolean(message.text)
       const hasAttachments = Boolean(message.files?.length)
@@ -349,30 +231,30 @@ const ChatbotWidget = () => {
         return
       }
 
-      setStatus('submitted')
-
       if (message.files?.length) {
         toast.success('Files attached', {
           description: `${message.files.length} file(s) attached to message`,
         })
       }
 
-      addUserMessage(message.text || 'Sent with attachments')
+      sendMessage({
+        text: message.text || 'Sent with attachments',
+        files: message.files,
+      })
       setText('')
     },
-    [addUserMessage]
+    [sendMessage]
   )
 
   const handleSuggestionClick = useCallback(
     (suggestion: string) => {
-      setStatus('submitted')
-      addUserMessage(suggestion)
+      sendMessage({ text: suggestion })
     },
-    [addUserMessage]
+    [sendMessage]
   )
 
   const handleTranscriptionChange = useCallback((transcript: string) => {
-    setText((prev) => (prev ? `${prev} ${transcript}` : transcript))
+    setText((prev: string) => (prev ? `${prev} ${transcript}` : transcript))
   }, [])
 
   const handleTextChange = useCallback(
@@ -392,7 +274,7 @@ const ChatbotWidget = () => {
   }, [])
 
   const isSubmitDisabled = useMemo(
-    () => !(text.trim() || status) || status === 'streaming',
+    () => !text.trim() || status === 'streaming' || status === 'submitted',
     [text, status]
   )
 
@@ -401,51 +283,22 @@ const ChatbotWidget = () => {
       <Conversation>
         <ConversationContent>
           {messages.length === 0 && <ConversationEmptyState />}
-          {messages.map(({ versions, ...message }) => (
-            <MessageBranch defaultBranch={0} key={message.key}>
+          {messages.map((message) => (
+            <MessageBranch defaultBranch={0} key={message.id}>
               <MessageBranchContent>
-                {versions.map((version) => (
-                  <Message
-                    from={message.from}
-                    key={`${message.key}-${version.id}`}
-                  >
-                    <div>
-                      {message.sources?.length && (
-                        <Sources>
-                          <SourcesTrigger count={message.sources.length} />
-                          <SourcesContent>
-                            {message.sources.map((source) => (
-                              <Source
-                                href={source.href}
-                                key={source.href}
-                                title={source.title}
-                              />
-                            ))}
-                          </SourcesContent>
-                        </Sources>
-                      )}
-                      {message.reasoning && (
-                        <Reasoning duration={message.reasoning.duration}>
-                          <ReasoningTrigger />
-                          <ReasoningContent>
-                            {message.reasoning.content}
-                          </ReasoningContent>
-                        </Reasoning>
-                      )}
-                      <MessageContent>
-                        <MessageResponse>{version.content}</MessageResponse>
-                      </MessageContent>
-                    </div>
-                  </Message>
-                ))}
+                <Message
+                  from={message.role === 'user' ? 'user' : 'assistant'}
+                  key={message.id}
+                >
+                  <div>
+                    <MessageContent>
+                      <MessageResponse>
+                        {getMessageText(message)}
+                      </MessageResponse>
+                    </MessageContent>
+                  </div>
+                </Message>
               </MessageBranchContent>
-              {versions.length > 1 && (
-                <MessageBranchSelector>
-                  <MessageBranchPrevious />
-                  <MessageBranchPage />
-                  <MessageBranchNext />
-                </MessageBranchSelector>
-              )}
             </MessageBranch>
           ))}
         </ConversationContent>
@@ -462,7 +315,7 @@ const ChatbotWidget = () => {
           ))}
         </Suggestions>
         <div className="w-full pb-2">
-          <PromptInput globalDrop multiple onSubmit={handleSubmit}>
+          <PromptInput globalDrop multiple onSubmit={handlePromptSubmit}>
             <PromptInputHeader>
               <PromptInputAttachmentsDisplay />
             </PromptInputHeader>
@@ -530,7 +383,11 @@ const ChatbotWidget = () => {
                   </ModelSelectorContent>
                 </ModelSelector>
               </PromptInputTools>
-              <PromptInputSubmit disabled={isSubmitDisabled} status={status} />
+              <PromptInputSubmit
+                disabled={isSubmitDisabled}
+                onStop={stop}
+                status={status}
+              />
             </PromptInputFooter>
           </PromptInput>
         </div>

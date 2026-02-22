@@ -1,1 +1,3 @@
-export { POST } from '@features/chat-llm'
+import { chatLLM } from '@features/chat-llm'
+
+export const POST = chatLLM
