@@ -23,6 +23,9 @@ export default async function HomePage() {
       <h2 className="text-muted-foreground mb-6 text-xl">
         Sign in to start chatting with our AI assistant
       </h2>
+      <p className="text-muted-foreground mb-4 text-sm">
+        This chatbot is anonymous and doesn&apos;t record your chat history.
+      </p>
       <Button asChild>
         <Link href={'/auth/sign-in'}>Sign In</Link>
       </Button>
