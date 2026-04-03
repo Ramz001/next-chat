@@ -10,8 +10,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next'
 const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
-  title: 'Next.js Chat App',
-  description: 'A chat application built with Next.js and React.',
+  title: 'Future Generations AI Chatbot',
+  description: 'Official AI assistant for the Uzbek Ministry of Ecology & Sustainable Development.',
   icons: {
     icon: '/chat.svg',
   },

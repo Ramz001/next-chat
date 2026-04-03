@@ -31,14 +31,12 @@ export const models = [
 export const ALLOWED_MODELS = models.map((model) => model.id)
 
 export const suggestions = [
-  'What are the latest trends in AI?',
-  'How does machine learning work?',
-  'Explain quantum computing',
-  'Best practices for React development',
-  'Tell me about TypeScript benefits',
-  'How to optimize database queries?',
-  'What is the difference between SQL and NoSQL?',
-  'Explain cloud computing basics',
+  'What are the current sustainability regulations in Uzbekistan?',
+  'How can our organisation align with the Future Generations principles?',
+  'Explain the latest environmental laws regarding waste management.',
+  'What are the policies on renewable energy adoption?',
+  'Как мы можем внедрить экологические стандарты на нашем предприятии?',
+  'O‘zbekiston Respublikasining ekologik qonunchiligi qanday?',
 ]
 
 export const chefs = ['Google', 'OpenAI', 'Moonshot AI']
