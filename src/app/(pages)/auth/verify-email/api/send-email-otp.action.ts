@@ -38,7 +38,7 @@ const sendEmailOTP = async (
   })
 
   const { data, error } = await resend.emails.send({
-    from: 'Acme <onboarding@resend.dev>',
+    from: process.env.RESEND_SEND_EMAIL || '',
     to: [email],
     subject: 'Your OTP Code',
     react: OTPEmail({

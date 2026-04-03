@@ -132,9 +132,9 @@ test.describe('Chat page - authenticated user', () => {
     await page.goto('/')
 
     const textarea = page.getByPlaceholder(/What would you like to know/)
-    await textarea.fill('Test message')
+    await textarea.pressSequentially('Test message')
 
-    const submitButton = page.locator('button[type="submit"]')
+    const submitButton = page.getByRole('button', { name: 'Submit' })
     await expect(submitButton).toBeEnabled()
   })
 })

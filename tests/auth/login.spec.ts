@@ -26,9 +26,9 @@ test.describe('Login functionality', () => {
     // Submit the form
     await page.getByRole('button', { name: 'Login', exact: true }).click()
 
-    // Verify error message appears (adjust selector based on your error display)
-    await expect(page.getByText(/error|invalid|failed/i)).toBeVisible({
-      timeout: 5000,
-    })
+    // Verify error toast appears (auth returns 'Invalid email or password.')
+    await expect(
+      page.getByText('Invalid email or password.')
+    ).toBeVisible({ timeout: 10000 })
   })
 })
