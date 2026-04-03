@@ -11,7 +11,8 @@ const dmSans = DM_Sans({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
   title: 'Future Generations AI Chatbot',
-  description: 'Official AI assistant for the Uzbek Ministry of Ecology & Sustainable Development.',
+  description:
+    'Official AI assistant for the Uzbek Ministry of Ecology & Sustainable Development.',
   icons: {
     icon: '/chat.svg',
   },

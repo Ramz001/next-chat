@@ -1,1 +1,1 @@
-export * from "./api/transcribe.route"
+export * from './api/transcribe.route'
