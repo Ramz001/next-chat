@@ -10,7 +10,7 @@ export default async function HomePage() {
   if (session) {
     return (
       <Gutter>
-        <main className="flex h-[calc(100vh-4rem)] flex-col">
+        <main className="flex h-[calc(100dvh-4rem)] flex-col">
           <ChatbotWidget />
         </main>
       </Gutter>
@@ -18,7 +18,7 @@ export default async function HomePage() {
   }
 
   return (
-    <Gutter className="flex min-h-[90vh] flex-col items-center justify-center gap-4 text-center">
+    <Gutter className="flex min-h-[90dvh] flex-col items-center justify-center gap-4 text-center">
       <h1 className="text-foreground mb-2 text-4xl font-bold">Welcome to the Future Generations AI 👋</h1>
       <h2 className="text-muted-foreground mb-6 text-xl max-w-2xl">
         Official AI assistant for the Uzbek Ministry of Ecology & Sustainable Development
