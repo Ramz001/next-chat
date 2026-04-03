@@ -109,7 +109,11 @@ export function ProfileEditForm() {
                       aria-invalid={isInvalid}
                       placeholder="your@email.com"
                       autoComplete="email"
+                      disabled
                     />
+                    <p className="text-muted-foreground text-sm">
+                      Email address cannot be changed.
+                    </p>
                     {isInvalid && (
                       <FieldError errors={field.state.meta.errors} />
                     )}
