@@ -79,6 +79,21 @@ model RateLimiterFlexible {
   expire DateTime?
 }
 
+model Product {
+  id          Int       @id(map: "products_pkey") @default(autoincrement())
+  name        String    @db.VarChar(255)
+  description String?
+  url         String?   @db.VarChar(255)
+  logo        String?   @db.VarChar(255)
+  platform    String[]
+  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  updated_at  DateTime? @default(now()) @db.Timestamptz(6)
+  summary     String?
+  categories  Json?     @db.Json
+  labels      String[]
+  media       Json?     @db.Json
+}
+
 enum Role {
   USER
   ADMIN

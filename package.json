@@ -10,6 +10,7 @@
     "db:pull": "npx prisma db pull",
     "db:push": "npx prisma db push",
     "db:generate": "npx prisma generate",
+    "db:migrate": "npx prisma migrate dev",
     "db:studio": "npx prisma studio",
     "format:write": "prettier --write \"src/**/*.{js,ts,json,css,md,jsx,tsx}\"",
     "format:check": "prettier --check \"src/**/*.{js,ts,json,css,md,jsx,tsx}\"",
