@@ -69,6 +69,7 @@ export type ProductCountAggregateOutputType = {
   categories: number
   labels: number
   media: number
+  description_json: number
   _all: number
 }
 
@@ -115,6 +116,7 @@ export type ProductCountAggregateInputType = {
   categories?: true
   labels?: true
   media?: true
+  description_json?: true
   _all?: true
 }
 
@@ -224,6 +226,7 @@ export type ProductGroupByOutputType = {
   categories: runtime.JsonValue | null
   labels: string[]
   media: runtime.JsonValue | null
+  description_json: runtime.JsonValue | null
   _count: ProductCountAggregateOutputType | null
   _avg: ProductAvgAggregateOutputType | null
   _sum: ProductSumAggregateOutputType | null
@@ -260,6 +263,7 @@ export type ProductWhereInput = {
   categories?: Prisma.JsonNullableFilter<'Product'>
   labels?: Prisma.StringNullableListFilter<'Product'>
   media?: Prisma.JsonNullableFilter<'Product'>
+  description_json?: Prisma.JsonNullableFilter<'Product'>
 }
 
 export type ProductOrderByWithRelationInput = {
@@ -275,6 +279,7 @@ export type ProductOrderByWithRelationInput = {
   categories?: Prisma.SortOrderInput | Prisma.SortOrder
   labels?: Prisma.SortOrder
   media?: Prisma.SortOrderInput | Prisma.SortOrder
+  description_json?: Prisma.SortOrderInput | Prisma.SortOrder
 }
 
 export type ProductWhereUniqueInput = Prisma.AtLeast<
@@ -294,6 +299,7 @@ export type ProductWhereUniqueInput = Prisma.AtLeast<
     categories?: Prisma.JsonNullableFilter<'Product'>
     labels?: Prisma.StringNullableListFilter<'Product'>
     media?: Prisma.JsonNullableFilter<'Product'>
+    description_json?: Prisma.JsonNullableFilter<'Product'>
   },
   'id'
 >
@@ -311,6 +317,7 @@ export type ProductOrderByWithAggregationInput = {
   categories?: Prisma.SortOrderInput | Prisma.SortOrder
   labels?: Prisma.SortOrder
   media?: Prisma.SortOrderInput | Prisma.SortOrder
+  description_json?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ProductCountOrderByAggregateInput
   _avg?: Prisma.ProductAvgOrderByAggregateInput
   _max?: Prisma.ProductMaxOrderByAggregateInput
@@ -349,6 +356,7 @@ export type ProductScalarWhereWithAggregatesInput = {
   categories?: Prisma.JsonNullableWithAggregatesFilter<'Product'>
   labels?: Prisma.StringNullableListFilter<'Product'>
   media?: Prisma.JsonNullableWithAggregatesFilter<'Product'>
+  description_json?: Prisma.JsonNullableWithAggregatesFilter<'Product'>
 }
 
 export type ProductCreateInput = {
@@ -363,6 +371,7 @@ export type ProductCreateInput = {
   categories?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   labels?: Prisma.ProductCreatelabelsInput | string[]
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description_json?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ProductUncheckedCreateInput = {
@@ -378,6 +387,7 @@ export type ProductUncheckedCreateInput = {
   categories?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   labels?: Prisma.ProductCreatelabelsInput | string[]
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description_json?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ProductUpdateInput = {
@@ -400,6 +410,7 @@ export type ProductUpdateInput = {
   categories?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   labels?: Prisma.ProductUpdatelabelsInput | string[]
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description_json?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ProductUncheckedUpdateInput = {
@@ -423,6 +434,7 @@ export type ProductUncheckedUpdateInput = {
   categories?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   labels?: Prisma.ProductUpdatelabelsInput | string[]
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description_json?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ProductCreateManyInput = {
@@ -438,6 +450,7 @@ export type ProductCreateManyInput = {
   categories?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   labels?: Prisma.ProductCreatelabelsInput | string[]
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description_json?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ProductUpdateManyMutationInput = {
@@ -460,6 +473,7 @@ export type ProductUpdateManyMutationInput = {
   categories?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   labels?: Prisma.ProductUpdatelabelsInput | string[]
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description_json?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type ProductUncheckedUpdateManyInput = {
@@ -483,6 +497,7 @@ export type ProductUncheckedUpdateManyInput = {
   categories?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   labels?: Prisma.ProductUpdatelabelsInput | string[]
   media?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  description_json?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
 }
 
 export type StringNullableListFilter<$PrismaModel = never> = {
@@ -506,6 +521,7 @@ export type ProductCountOrderByAggregateInput = {
   categories?: Prisma.SortOrder
   labels?: Prisma.SortOrder
   media?: Prisma.SortOrder
+  description_json?: Prisma.SortOrder
 }
 
 export type ProductAvgOrderByAggregateInput = {
@@ -573,6 +589,7 @@ export type ProductSelect<
     categories?: boolean
     labels?: boolean
     media?: boolean
+    description_json?: boolean
   },
   ExtArgs['result']['product']
 >
@@ -594,6 +611,7 @@ export type ProductSelectCreateManyAndReturn<
     categories?: boolean
     labels?: boolean
     media?: boolean
+    description_json?: boolean
   },
   ExtArgs['result']['product']
 >
@@ -615,6 +633,7 @@ export type ProductSelectUpdateManyAndReturn<
     categories?: boolean
     labels?: boolean
     media?: boolean
+    description_json?: boolean
   },
   ExtArgs['result']['product']
 >
@@ -632,6 +651,7 @@ export type ProductSelectScalar = {
   categories?: boolean
   labels?: boolean
   media?: boolean
+  description_json?: boolean
 }
 
 export type ProductOmit<
@@ -649,7 +669,8 @@ export type ProductOmit<
   | 'summary'
   | 'categories'
   | 'labels'
-  | 'media',
+  | 'media'
+  | 'description_json',
   ExtArgs['result']['product']
 >
 
@@ -673,6 +694,7 @@ export type $ProductPayload<
       categories: runtime.JsonValue | null
       labels: string[]
       media: runtime.JsonValue | null
+      description_json: runtime.JsonValue | null
     },
     ExtArgs['result']['product']
   >
@@ -1277,6 +1299,7 @@ export interface ProductFieldRefs {
   readonly categories: Prisma.FieldRef<'Product', 'Json'>
   readonly labels: Prisma.FieldRef<'Product', 'String[]'>
   readonly media: Prisma.FieldRef<'Product', 'Json'>
+  readonly description_json: Prisma.FieldRef<'Product', 'Json'>
 }
 
 // Custom InputTypes

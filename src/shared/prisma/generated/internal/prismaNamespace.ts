@@ -1113,6 +1113,7 @@ export const ProductScalarFieldEnum = {
   categories: 'categories',
   labels: 'labels',
   media: 'media',
+  description_json: 'description_json',
 } as const
 
 export type ProductScalarFieldEnum =
