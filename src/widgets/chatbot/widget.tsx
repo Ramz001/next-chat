@@ -62,6 +62,7 @@ import { CheckIcon, GlobeIcon, StopCircleIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { chefs, suggestions, models } from './model/ai-models'
+import { Button } from '@shared/ui/button'
 
 const AttachmentItem = ({
   attachment,
@@ -121,7 +122,13 @@ const SuggestionItem = ({
     onClick(suggestion)
   }, [onClick, suggestion])
 
-  return <Suggestion onClick={handleClick} suggestion={suggestion} />
+  return (
+    <Suggestion
+      onClick={handleClick}
+      variant="outline"
+      suggestion={suggestion}
+    />
+  )
 }
 
 const ModelItem = ({
@@ -262,7 +269,7 @@ const ChatbotWidget = () => {
   )
 
   return (
-    <div className="relative flex size-full flex-col divide-y overflow-hidden">
+    <div className="relative flex size-full flex-col gap-0 overflow-hidden">
       <Conversation>
         <ConversationContent>
           {messages.length === 0 && <ConversationEmptyState />}
@@ -280,128 +287,118 @@ const ChatbotWidget = () => {
                     from={isAssistant ? 'assistant' : 'user'}
                     key={message.id}
                   >
-                    <div>
-                      <MessageContent>
-                        {showShimmer ? (
-                          <Shimmer duration={1.5}>Thinking...</Shimmer>
-                        ) : (
-                          <MessageResponse
-                            controls={{ code: true, table: true }}
-                          >
-                            {messageText}
-                          </MessageResponse>
-                        )}
-                      </MessageContent>
-                    </div>
+                    <MessageContent>
+                      {showShimmer ? (
+                        <Shimmer duration={1.5}>Thinking...</Shimmer>
+                      ) : (
+                        <MessageResponse controls={{ code: true, table: true }}>
+                          {messageText}
+                        </MessageResponse>
+                      )}
+                    </MessageContent>
                   </Message>
                 </MessageBranchContent>
               </MessageBranch>
             )
           })}
           {isLoading && (
-            <div className="flex justify-center py-2">
-              <button
-                className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors"
-                onClick={stop}
-                type="button"
-              >
-                <StopCircleIcon size={16} />
-                <span>Cancel</span>
-              </button>
-            </div>
+            <Button
+              className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm transition-colors"
+              onClick={stop}
+              type="button"
+              variant={'ghost'}
+            >
+              <StopCircleIcon size={16} />
+              <span>Cancel</span>
+            </Button>
           )}
         </ConversationContent>
         <ConversationScrollButton />
       </Conversation>
-      <div className="grid shrink-0 gap-4 pt-4">
-        <Suggestions>
-          {suggestions.map((suggestion) => (
-            <SuggestionItem
-              key={suggestion}
-              onClick={handleSuggestionClick}
-              suggestion={suggestion}
+
+      <Suggestions className="mb-2">
+        {suggestions.map((suggestion) => (
+          <SuggestionItem
+            key={suggestion}
+            onClick={handleSuggestionClick}
+            suggestion={suggestion}
+          />
+        ))}
+      </Suggestions>
+      <PromptInput globalDrop multiple onSubmit={handlePromptSubmit}>
+        <PromptInputHeader>
+          <PromptInputAttachmentsDisplay />
+        </PromptInputHeader>
+        <PromptInputBody>
+          <PromptInputTextarea onChange={handleTextChange} value={text} />
+        </PromptInputBody>
+        <PromptInputFooter>
+          <PromptInputTools>
+            <PromptInputActionMenu>
+              <PromptInputActionMenuTrigger />
+              <PromptInputActionMenuContent className="w-full">
+                <PromptInputActionAddAttachments />
+              </PromptInputActionMenuContent>
+            </PromptInputActionMenu>
+            <SpeechInput
+              className="shrink-0"
+              onAudioRecorded={handleAudioRecorded}
+              onTranscriptionChange={handleTranscriptionChange}
+              size="icon-sm"
+              variant="ghost"
             />
-          ))}
-        </Suggestions>
-        <div className="w-full pb-2">
-          <PromptInput globalDrop multiple onSubmit={handlePromptSubmit}>
-            <PromptInputHeader>
-              <PromptInputAttachmentsDisplay />
-            </PromptInputHeader>
-            <PromptInputBody>
-              <PromptInputTextarea onChange={handleTextChange} value={text} />
-            </PromptInputBody>
-            <PromptInputFooter>
-              <PromptInputTools>
-                <PromptInputActionMenu>
-                  <PromptInputActionMenuTrigger />
-                  <PromptInputActionMenuContent className="w-full">
-                    <PromptInputActionAddAttachments />
-                  </PromptInputActionMenuContent>
-                </PromptInputActionMenu>
-                <SpeechInput
-                  className="shrink-0"
-                  onAudioRecorded={handleAudioRecorded}
-                  onTranscriptionChange={handleTranscriptionChange}
-                  size="icon-sm"
-                  variant="ghost"
-                />
-                <PromptInputButton
-                  onClick={toggleWebSearch}
-                  variant={useWebSearch ? 'default' : 'ghost'}
-                >
-                  <GlobeIcon size={16} />
-                  <span>Search</span>
+            <PromptInputButton
+              onClick={toggleWebSearch}
+              variant={useWebSearch ? 'default' : 'ghost'}
+            >
+              <GlobeIcon size={16} />
+              <span>Search</span>
+            </PromptInputButton>
+            <ModelSelector
+              onOpenChange={setModelSelectorOpen}
+              open={modelSelectorOpen}
+            >
+              <ModelSelectorTrigger asChild>
+                <PromptInputButton>
+                  {selectedModelData?.chefSlug && (
+                    <ModelSelectorLogo provider={selectedModelData.chefSlug} />
+                  )}
+                  {selectedModelData?.name && (
+                    <ModelSelectorName>
+                      {selectedModelData.name}
+                    </ModelSelectorName>
+                  )}
                 </PromptInputButton>
-                <ModelSelector
-                  onOpenChange={setModelSelectorOpen}
-                  open={modelSelectorOpen}
-                >
-                  <ModelSelectorTrigger asChild>
-                    <PromptInputButton>
-                      {selectedModelData?.chefSlug && (
-                        <ModelSelectorLogo
-                          provider={selectedModelData.chefSlug}
-                        />
-                      )}
-                      {selectedModelData?.name && (
-                        <ModelSelectorName>
-                          {selectedModelData.name}
-                        </ModelSelectorName>
-                      )}
-                    </PromptInputButton>
-                  </ModelSelectorTrigger>
-                  <ModelSelectorContent>
-                    <ModelSelectorInput placeholder="Search models..." />
-                    <ModelSelectorList>
-                      <ModelSelectorEmpty>No models found.</ModelSelectorEmpty>
-                      {chefs.map((chef) => (
-                        <ModelSelectorGroup heading={chef} key={chef}>
-                          {models
-                            .filter((m) => m.chef === chef)
-                            .map((m) => (
-                              <ModelItem
-                                isSelected={model === m.id}
-                                key={m.id}
-                                m={m}
-                                onSelect={handleModelSelect}
-                              />
-                            ))}
-                        </ModelSelectorGroup>
-                      ))}
-                    </ModelSelectorList>
-                  </ModelSelectorContent>
-                </ModelSelector>
-              </PromptInputTools>
-              <PromptInputSubmit
-                disabled={isSubmitDisabled}
-                onStop={stop}
-                status={status}
-              />
-            </PromptInputFooter>
-          </PromptInput>
-        </div>
-      </div>
+              </ModelSelectorTrigger>
+              <ModelSelectorContent>
+                <ModelSelectorInput placeholder="Search models..." />
+                <ModelSelectorList>
+                  <ModelSelectorEmpty>No models found.</ModelSelectorEmpty>
+                  {chefs.map((chef) => (
+                    <ModelSelectorGroup heading={chef} key={chef}>
+                      {models
+                        .filter((m) => m.chef === chef)
+                        .map((m) => (
+                          <ModelItem
+                            isSelected={model === m.id}
+                            key={m.id}
+                            m={m}
+                            onSelect={handleModelSelect}
+                          />
+                        ))}
+                    </ModelSelectorGroup>
+                  ))}
+                </ModelSelectorList>
+              </ModelSelectorContent>
+            </ModelSelector>
+          </PromptInputTools>
+          <PromptInputSubmit
+            disabled={isSubmitDisabled}
+            onStop={stop}
+            status={status}
+          />
+        </PromptInputFooter>
+      </PromptInput>
     </div>
   )
 }

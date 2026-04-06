@@ -1,17 +1,9 @@
-'use client'
-
 import Link from 'next/link'
 import { MessageSquareText } from 'lucide-react'
-import { Button } from '@shared/ui/button'
 import Gutter from '@shared/ui/gutter'
-import { ThemeToggle } from './ui/theme-toggle'
-import { UserMenu } from './ui/user-menu'
-import { useSession } from 'next-auth/react'
+import ClientSection from './ui/client-section'
 
 export default function Navbar() {
-  const { data: session } = useSession()
-  const user = session?.user
-
   return (
     <header className="border-border/40 bg-background/80 supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b backdrop-blur-md">
       <Gutter className="flex h-14 items-center justify-between gap-4">
@@ -23,22 +15,27 @@ export default function Navbar() {
           <span className="inline">Future Generations AI</span>
         </Link>
 
-        <div className="flex items-center gap-1">
-          <ThemeToggle />
-
-          {user ? (
-            <UserMenu user={user} />
-          ) : (
-            <div className="hidden items-center gap-2 md:flex">
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/auth/sign-in">Sign In</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link href="/auth/sign-up">Get Started</Link>
-              </Button>
-            </div>
-          )}
+        <div className="flex items-center gap-6">
+          <Link
+            href="/"
+            className="text-foreground text-sm font-medium transition-opacity hover:opacity-80"
+          >
+            Home
+          </Link>
+          <Link
+            href="/blogs"
+            className="text-foreground text-sm font-medium transition-opacity hover:opacity-80"
+          >
+            Blogs
+          </Link>
+          <Link
+            href="/blogs"
+            className="text-foreground text-sm font-medium transition-opacity hover:opacity-80"
+          >
+            Privacy
+          </Link>
         </div>
+        <ClientSection />
       </Gutter>
     </header>
   )
