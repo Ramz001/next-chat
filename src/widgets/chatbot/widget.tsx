@@ -316,7 +316,7 @@ const ChatbotWidget = () => {
         <ConversationScrollButton />
       </Conversation>
 
-      <Suggestions className="mb-2">
+      <Suggestions className="my-2">
         {suggestions.map((suggestion) => (
           <SuggestionItem
             key={suggestion}
