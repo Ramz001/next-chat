@@ -20,6 +20,7 @@ import {
 } from '../models/verify-email.schema'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import posthog from 'posthog-js'
 
 export default function OTPInputSection({ email }: SendEmailType) {
   const [otp, setOtp] = useState('')
@@ -42,6 +43,9 @@ export default function OTPInputSection({ email }: SendEmailType) {
 
         await update(res.data)
 
+        posthog.capture('email_verified', {
+          email,
+        })
         toast.success('Email verified successfully!')
         router.push('/')
       } catch (error) {

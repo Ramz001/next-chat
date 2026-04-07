@@ -9,6 +9,7 @@ import Link from 'next/link'
 const ClientSection = () => {
   const { data: session } = useSession()
   const user = session?.user
+
   return (
     <div className="flex items-center gap-1">
       <ThemeToggle />

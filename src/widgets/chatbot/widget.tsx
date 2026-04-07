@@ -345,7 +345,6 @@ const ChatbotWidget = () => {
               onAudioRecorded={handleAudioRecorded}
               onTranscriptionChange={handleTranscriptionChange}
               size="icon-sm"
-              variant="ghost"
             />
             <PromptInputButton
               onClick={toggleWebSearch}
