@@ -1,9 +1,11 @@
 import { Button } from '@/shared/ui/button'
 import { handleError } from '@shared/utils/handle-error'
 import { signIn } from 'next-auth/react'
-import posthog from 'posthog-js'
+import { usePostHog } from 'posthog-js/react'
 
 export const GithubLoginButton = () => {
+  const posthog = usePostHog()
+
   const handleLogin = async () => {
     try {
       await signIn('github', { redirect: true, redirectTo: '/' })

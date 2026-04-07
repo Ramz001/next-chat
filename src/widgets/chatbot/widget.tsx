@@ -1,19 +1,11 @@
 'use client'
 
-import type { FileUIPart } from 'ai'
 import type { PromptInputMessage } from '@shared/ui/ai-elements/prompt-input'
 
 import { useChat } from '@ai-sdk/react'
 import { DefaultChatTransport } from 'ai'
 
 import axios from 'axios'
-import {
-  Attachment,
-  AttachmentInfo,
-  AttachmentPreview,
-  AttachmentRemove,
-  Attachments,
-} from '@shared/ui/ai-elements/attachments'
 import {
   Conversation,
   ConversationContent,
@@ -33,10 +25,8 @@ import {
   ModelSelectorEmpty,
   ModelSelectorGroup,
   ModelSelectorInput,
-  ModelSelectorItem,
   ModelSelectorList,
   ModelSelectorLogo,
-  ModelSelectorLogoGroup,
   ModelSelectorName,
   ModelSelectorTrigger,
 } from '@shared/ui/ai-elements/model-selector'
@@ -53,114 +43,18 @@ import {
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
-  usePromptInputAttachments,
 } from '@shared/ui/ai-elements/prompt-input'
 import { Shimmer } from '@shared/ui/ai-elements/shimmer'
 import { SpeechInput } from '@shared/ui/ai-elements/speech-input'
-import { Suggestion, Suggestions } from '@shared/ui/ai-elements/suggestion'
-import { CheckIcon, GlobeIcon, StopCircleIcon } from 'lucide-react'
+import { Suggestions } from '@shared/ui/ai-elements/suggestion'
+import { GlobeIcon, StopCircleIcon } from 'lucide-react'
 import { useCallback, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import { chefs, suggestions, models } from './model/ai-models'
 import { Button } from '@shared/ui/button'
-
-const AttachmentItem = ({
-  attachment,
-  onRemove,
-}: {
-  attachment: FileUIPart & { id: string }
-  onRemove: (id: string) => void
-}) => {
-  const handleRemove = useCallback(() => {
-    onRemove(attachment.id)
-  }, [onRemove, attachment.id])
-
-  return (
-    <Attachment data={attachment} onRemove={handleRemove}>
-      <AttachmentPreview />
-      <AttachmentInfo />
-      <AttachmentRemove variant={'destructive'} />
-    </Attachment>
-  )
-}
-
-const PromptInputAttachmentsDisplay = () => {
-  const attachments = usePromptInputAttachments()
-
-  const handleRemove = useCallback(
-    (id: string) => {
-      attachments.remove(id)
-    },
-    [attachments]
-  )
-
-  if (attachments.files.length === 0) {
-    return null
-  }
-
-  return (
-    <Attachments variant="inline">
-      {attachments.files.map((attachment) => (
-        <AttachmentItem
-          attachment={attachment}
-          key={attachment.id}
-          onRemove={handleRemove}
-        />
-      ))}
-    </Attachments>
-  )
-}
-
-const SuggestionItem = ({
-  suggestion,
-  onClick,
-}: {
-  suggestion: string
-  onClick: (suggestion: string) => void
-}) => {
-  const handleClick = useCallback(() => {
-    onClick(suggestion)
-  }, [onClick, suggestion])
-
-  return (
-    <Suggestion
-      onClick={handleClick}
-      variant="outline"
-      suggestion={suggestion}
-    />
-  )
-}
-
-const ModelItem = ({
-  m,
-  isSelected,
-  onSelect,
-}: {
-  m: (typeof models)[0]
-  isSelected: boolean
-  onSelect: (id: string) => void
-}) => {
-  const handleSelect = useCallback(() => {
-    onSelect(m.id)
-  }, [onSelect, m.id])
-
-  return (
-    <ModelSelectorItem onSelect={handleSelect} value={m.id}>
-      <ModelSelectorLogo provider={m.chefSlug} />
-      <ModelSelectorName>{m.name}</ModelSelectorName>
-      <ModelSelectorLogoGroup>
-        {m.providers.map((provider) => (
-          <ModelSelectorLogo key={provider} provider={provider} />
-        ))}
-      </ModelSelectorLogoGroup>
-      {isSelected ? (
-        <CheckIcon className="ml-auto size-4" />
-      ) : (
-        <div className="ml-auto size-4" />
-      )}
-    </ModelSelectorItem>
-  )
-}
+import { ModelItem } from './ui/model-selector-item'
+import { SuggestionItem } from './ui/suggestion-item'
+import { PromptInputAttachmentsDisplay } from './ui/attachments-display'
 
 const ChatbotWidget = () => {
   const [model, setModel] = useState<string>(models[0].id)

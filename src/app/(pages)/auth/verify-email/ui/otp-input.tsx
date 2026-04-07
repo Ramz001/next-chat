@@ -20,13 +20,14 @@ import {
 } from '../models/verify-email.schema'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import posthog from 'posthog-js'
+import { usePostHog } from 'posthog-js/react'
 
 export default function OTPInputSection({ email }: SendEmailType) {
   const [otp, setOtp] = useState('')
   const [isPending, startTransition] = useTransition()
   const { update } = useSession()
   const router = useRouter()
+  const posthog = usePostHog()
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()

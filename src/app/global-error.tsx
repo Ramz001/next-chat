@@ -1,4 +1,5 @@
 'use client'
+
 import posthog from 'posthog-js'
 import NextError from 'next/error'
 import { useEffect } from 'react'
