@@ -4,6 +4,7 @@ import Gutter from '@shared/ui/gutter'
 import ClientSection from './ui/client-section'
 
 export default function Navbar() {
+  throw new Error('Test error for PostHog integration') // This error is intentional to test the global error handling and PostHog integration. Remove this line in production.
   return (
     <header className="border-border/40 bg-background/80 supports-backdrop-blur:bg-background/60 sticky top-0 z-40 w-full border-b backdrop-blur-md">
       <Gutter className="flex h-14 items-center justify-between gap-4">
