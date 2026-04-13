@@ -15,7 +15,7 @@ export default function Navbar() {
           <span className="inline">Future Generations AI</span>
         </Link>
 
-        <div className="flex items-center gap-6">
+        {/* <div className="flex items-center gap-6">
           <Link
             href="/"
             className="text-foreground text-sm font-medium transition-opacity hover:opacity-80"
@@ -34,7 +34,7 @@ export default function Navbar() {
           >
             Privacy
           </Link>
-        </div>
+        </div> */}
         <ClientSection />
       </Gutter>
     </header>
